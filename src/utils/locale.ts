@@ -23,6 +23,7 @@ const LOCALE_NAME = {
   th: 'ภาษาไทย',
   tr: 'Türkçe',
   ur: 'اردو',
+  uz: 'Uzbekcha',
   zh: '简体中文',
   ms: 'Melayu',
   de: 'Deutsch',
@@ -38,6 +39,7 @@ const LOCALE_NAME_TO_CODE = {
   arabic: 'ar',
   russian: 'ru',
   urdu: 'ur',
+  uzbek: 'uz',
   Kurdish: 'ku',
 };
 
@@ -56,6 +58,7 @@ export const LANG_LOCALE_MAP = {
   th: 'th-TH',
   tr: 'tr-TR',
   ur: 'ur-PK',
+  uz: 'uz-UZ',
   zh: 'zh-CN',
   ms: 'ms-MY',
 };
@@ -141,6 +144,10 @@ export const Languages = {
     dir: Direction.RTL,
     locale: 'ur',
   },
+  175: {
+    // Uzbek
+    locale: 'uz',
+  },
   185: {
     // Chinese
     locale: 'zh',
@@ -177,7 +184,8 @@ export const shouldUseMinimalLayout = (lang: string): boolean => {
  * @param {string} locale
  * @returns {boolean}
  */
-export const isRTLLocale = (locale: string): boolean => RTL_LOCALES.includes(locale);
+export const isRTLLocale = (locale: string): boolean =>
+  RTL_LOCALES.includes(locale);
 
 /**
  * Gir the dir of the element based on the locale.
@@ -245,9 +253,12 @@ export const findLanguageIdByLocale = (locale: string): number => {
  * @param {string} path
  * @returns {LinkLanguageAlternate[]}
  */
-export const getLanguageAlternates = (path: string): LinkLanguageAlternate[] => {
+export const getLanguageAlternates = (
+  path: string
+): LinkLanguageAlternate[] => {
   const { locales } = i18nConfig;
   const basePath = getBasePath();
+
   return locales
     .map((locale) => ({
       hrefLang: locale,
@@ -292,7 +303,7 @@ export const toLocalizedNumber = (
   value: number,
   locale: string,
   showLeadingZero = false,
-  options: Intl.NumberFormatOptions = {},
+  options: Intl.NumberFormatOptions = {}
 ) => {
   if (numberFormatter && currentLanguageLocale === locale) {
     return getFormattedNumber(numberFormatter, value, showLeadingZero);
@@ -316,7 +327,7 @@ export const toLocalizedNumber = (
 const getFormattedNumber = (
   formatter: Intl.NumberFormat,
   value: number,
-  showLeadingZero: boolean,
+  showLeadingZero: boolean
 ): string => {
   const formattedNumber = formatter.format(value);
   if (!showLeadingZero || value >= 10) {
@@ -331,7 +342,8 @@ const getFormattedNumber = (
  * @param {string} locale
  * @returns {string}
  */
-export const getLangFullLocale = (locale: string): string => LANG_LOCALE_MAP[locale];
+export const getLangFullLocale = (locale: string): string =>
+  LANG_LOCALE_MAP[locale];
 
 /**
  * Takes a date and returns a localized string based on the provided locale and options.
@@ -344,7 +356,7 @@ export const getLangFullLocale = (locale: string): string => LANG_LOCALE_MAP[loc
 export const toLocalizedDate = (
   value: number | Date,
   locale: string,
-  options: Intl.DateTimeFormatOptions = {},
+  options: Intl.DateTimeFormatOptions = {}
 ): string => {
   const fullLocale = LANG_LOCALE_MAP[locale];
   return new Intl.DateTimeFormat(fullLocale, options).format(value);
@@ -362,7 +374,7 @@ export const toLocalizedDate = (
 export const localizeNumericalStringWithSplitter = (
   string: string,
   lang: string,
-  splitter = ':',
+  splitter = ':'
 ): string =>
   string
     .split(splitter)
@@ -411,7 +423,9 @@ export const getOpenGraphLocale = (currentLocale: string): string =>
  * @param {string} currentLocale
  * @returns {MetaTag[]}
  */
-export const getOpenGraphAlternateLocales = (currentLocale: string): MetaTag[] => {
+export const getOpenGraphAlternateLocales = (
+  currentLocale: string
+): MetaTag[] => {
   return Object.keys(LANG_LOCALE_MAP)
     .filter((languageCode) => languageCode !== currentLocale)
     .map((languageCode) => ({
@@ -427,7 +441,10 @@ export const getOpenGraphAlternateLocales = (currentLocale: string): MetaTag[] =
  * @param {string} locale
  * @returns {string}
  */
-export const toLocalizedMonthName = (monthNumber: number, locale: string): string => {
+export const toLocalizedMonthName = (
+  monthNumber: number,
+  locale: string
+): string => {
   const objDate = new Date();
   objDate.setDate(1);
   objDate.setMonth(monthNumber - 1);
